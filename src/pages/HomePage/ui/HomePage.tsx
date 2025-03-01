@@ -14,11 +14,11 @@ export function HomePage() {
         ]}
         categories={['One', 'Two', 'Three']}
         dataSwitch
+        max={100}
       />
     </Space>
   );
 }
-
 
 //kpgz.code_kpgz
 //

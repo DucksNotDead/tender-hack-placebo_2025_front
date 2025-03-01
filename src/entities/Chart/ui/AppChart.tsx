@@ -17,6 +17,8 @@ export function AppChart({
   data,
   categories,
   dataSwitch,
+  min,
+  max,
 }: IChartProps) {
   const wrapper = useRef<HTMLDivElement>(null);
   const chart = useRef<echarts.EChartsType | null>(null);
@@ -48,8 +50,8 @@ export function AppChart({
       [dataAxis]: {
         type: 'value',
         interval: minValue,
-        min: 0,
-        max: maxValue + (maxValue % minValue),
+        min: min && 0,
+        max: max && maxValue + (maxValue % minValue),
         nameGap: 200,
       },
       legend: dataSwitch
@@ -78,7 +80,7 @@ export function AppChart({
           } else {
             return value;
           }
-        }
+        },
       },
       series: data.map((group, index) => ({
         name: group.name,
@@ -95,7 +97,7 @@ export function AppChart({
 
   return (
     <Card>
-      <div ref={wrapper} style={{ width: 1700, height: 700 }}></div>
+      <div ref={wrapper} style={{ width: 1700, height: 300 }}></div>
     </Card>
   );
 }

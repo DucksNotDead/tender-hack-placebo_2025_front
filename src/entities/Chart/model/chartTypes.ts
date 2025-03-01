@@ -9,4 +9,6 @@ export interface IChartProps {
   dataSwitch?: boolean;
   smooth?: boolean;
   loading?: boolean;
+  min?: number;
+  max?: number;
 }
