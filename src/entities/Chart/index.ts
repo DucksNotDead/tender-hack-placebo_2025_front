@@ -1,1 +1,2 @@
-export type { IChart } from './model/chartTypes';
+export type { IChart, IChartProps } from './model/chartTypes';
+export { AppChart } from './ui/AppChart';

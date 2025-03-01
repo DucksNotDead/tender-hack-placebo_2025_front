@@ -39,6 +39,7 @@ export function AppAuthProvider({ children }: IProps) {
 
   const logout = useCallback(() => {
     setLocalToken(null);
+    setAuthValue(() => authDefaultContextValue)
   }, [setLocalToken]);
 
   const { mutate: auth } = useMutation({

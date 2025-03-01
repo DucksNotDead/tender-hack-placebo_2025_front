@@ -2,15 +2,7 @@ import { Card } from 'antd';
 import { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
-interface IProps {
-  title: string;
-  type: 'bar' | 'line';
-  data: { name: string; values: number[] }[];
-  categories: string[];
-  horizontal?: boolean;
-  dataSwitch?: boolean;
-  smooth?: boolean;
-}
+import { IChartProps } from '../model/chartTypes';
 
 function generateColor(index: number, totalItems: number) {
   const hue = (index / totalItems) * 360; // Распределяем оттенки равномерно по кругу
@@ -25,7 +17,7 @@ export function AppChart({
   data,
   categories,
   dataSwitch,
-}: IProps) {
+}: IChartProps) {
   const wrapper = useRef<HTMLDivElement>(null);
   const chart = useRef<echarts.EChartsType | null>(null);
 
@@ -39,7 +31,10 @@ export function AppChart({
     const { dataAxis, categoryAxis } = horizontal
       ? { dataAxis: 'xAxis', categoryAxis: 'yAxis' }
       : { dataAxis: 'yAxis', categoryAxis: 'xAxis' };
-    const plantValues = data.reduce<number[]>((state, current) => [...state, ...current.values], [])
+    const plantValues = data.reduce<number[]>(
+      (state, current) => [...state, ...current.values],
+      [],
+    );
     const minValue = Math.min(...plantValues);
     const maxValue = Math.max(...plantValues);
     const option: echarts.EChartsOption = {
@@ -47,6 +42,7 @@ export function AppChart({
         ? {
             data: categories,
             type: 'category',
+            nameGap: 200,
           }
         : {},
       [dataAxis]: {
@@ -54,6 +50,7 @@ export function AppChart({
         interval: minValue,
         min: 0,
         max: maxValue + (maxValue % minValue),
+        nameGap: 200,
       },
       legend: dataSwitch
         ? {
@@ -73,6 +70,16 @@ export function AppChart({
         },
       },
       calculable: true,
+      axisLabel: {
+        formatter: function (value: string) {
+          const maxLength = 18; // Максимальная длина метки
+          if (value.length > maxLength) {
+            return value.substring(0, maxLength) + '...';
+          } else {
+            return value;
+          }
+        }
+      },
       series: data.map((group, index) => ({
         name: group.name,
         data: group.values,
@@ -88,7 +95,7 @@ export function AppChart({
 
   return (
     <Card>
-      <div ref={wrapper} style={{ width: 900, height: 500 }}></div>
+      <div ref={wrapper} style={{ width: 1700, height: 700 }}></div>
     </Card>
   );
 }

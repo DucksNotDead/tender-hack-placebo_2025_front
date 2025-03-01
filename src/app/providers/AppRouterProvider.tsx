@@ -8,10 +8,10 @@ import {
 import { useEffect } from 'react';
 
 import { appRoutes } from 'shared/appRoutes';
-import { HomePage } from 'pages/HomePage';
 import { AuthPage } from 'pages/AuthPage';
 import { DashboardPage } from 'pages/DashboardPage';
 import { useAuth } from 'entities/Auth';
+import { TestReportPage } from 'pages/TestReportPage';
 
 export function AppRouterProvider() {
   const { isAuth } = useAuth();
@@ -27,7 +27,7 @@ export function AppRouterProvider() {
     <Routes>
       {isAuth && (
         <>
-          <Route path={appRoutes.home} element={<HomePage />} />
+          <Route path={appRoutes.home} element={<TestReportPage />} />
           <Route
             path={`${appRoutes.dashboard}/:guid`}
             element={<DashboardPage />}
