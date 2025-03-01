@@ -1,0 +1,15 @@
+:root {
+  --primary: rgba(217, 38, 38);
+  --primary-shadow: 0px 0px 8px 0px rgba(217, 38, 38, 0.8);
+  --green: rgb(119, 221, 119);
+  --green-shadow: 0px 0px 12px 0px rgba(119, 221, 119, 0.8);
+  --blue-light-shadow: 0px 0px 34px 4px rgba(225, 225, 225, 0.8);
+  --vio: rgb(85, 81, 255);
+  --vio-shadow: 0px 0px 12px 0px rgba(85, 81, 255, 0.8);
+  --grey: rgb(185, 185, 198);
+  --grey-shadow: 0px 0px 12px 0px rgba(185, 185, 198, 0.8);
+}
+
+.ant-card {
+  box-shadow: var(--blue-light-shadow) !important;
+}

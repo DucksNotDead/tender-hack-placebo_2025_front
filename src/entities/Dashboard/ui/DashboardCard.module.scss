@@ -1,6 +1,36 @@
 .main {
+  position: relative;
   width: 100%;
   max-width: 450px;
+}
+
+.header {
+  top: 12px;
+  right: 24px;
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.metricItem {
+  padding: 4px 12px;
+  background-color: var(--grey);
+  box-shadow: var(--grey-shadow);
+  border-radius: 7px;
+
+  span {
+    color: white!important;
+    font-size: 10px;
+    white-space: nowrap;
+
+    &:nth-child(1) {
+      color: black!important;
+      margin-right: 6px;
+      font-weight: 500;
+    }
+  }
 }
 
 .footer {

@@ -6,7 +6,6 @@ import { useAuth } from 'entities/Auth';
 import type { TDashboardCard } from '../model/dashboardTypes';
 
 import { DashboardChartWidget } from './DashboardChartWidget';
-import { DashboardMetrics } from './DashboardMetrics';
 import Styles from './DashboardCard.module.scss';
 
 export function DashboardCard({
@@ -27,8 +26,7 @@ export function DashboardCard({
 
   const subscribersNames = useMemo(() => {
     return subscribers.reduce(
-      (state, current) =>
-        current.id !== user?.id ? `${state}, ${current.full_name}` : state,
+      (state, current, index) => `${state}${index ? ',' : ''} ${current.full_name}`,
       '',
     );
   }, [subscribers, user]);
@@ -36,7 +34,17 @@ export function DashboardCard({
   return (
     <Card className={Styles.main}>
       <Space direction={'vertical'} style={{ width: '100%' }}>
-        <DashboardMetrics metrics={metrics} />
+        <div className={Styles.header}>
+          {metrics
+            .filter((_, index) => index < 4)
+            .map((metric) => (
+              <div key={metric.id} className={Styles.metricItem}>
+                <Typography.Text type={'secondary'}>{metric.name}</Typography.Text>
+
+                <Typography.Text>{metric.value}</Typography.Text>
+              </div>
+            ))}
+        </div>
         <DashboardChartWidget {...mainChart} />
         <div className={Styles.footer}>
           <Row align={'middle'} justify={'space-between'}>

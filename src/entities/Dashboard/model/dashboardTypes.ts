@@ -32,7 +32,7 @@ export interface IDashboardMetric {
   unit: string;
 }
 
-export type TDashboardFilter = Record<string, string>
+export type TDashboardFilter = Record<string, string>;
 
 interface IDashboardBase {
   id: string;
@@ -42,6 +42,11 @@ interface IDashboardBase {
   metrics: IDashboardMetric[];
   subscribers: IDashboardSubscriber[];
 }
+
+export type TDashboardCreateRequest = Pick<
+  IDashboardBase,
+  'title' | 'properties'
+> & { owner_id: number };
 
 export type TDashboardCard = IDashboardBase & {
   mainChart: IChartProps;

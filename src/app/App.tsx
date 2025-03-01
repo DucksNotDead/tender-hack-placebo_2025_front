@@ -8,6 +8,8 @@ import { AppRouterProvider } from './providers/AppRouterProvider';
 import { AppAntDesignProvider } from './providers/AppAntDesignProvider';
 import { AppAuthProvider } from './providers/AppAuthProvider';
 
+import './styles/global.css';
+
 export function App() {
   return (
     <AppAntDesignProvider>

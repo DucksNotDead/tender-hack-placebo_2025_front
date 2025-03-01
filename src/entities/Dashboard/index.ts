@@ -2,6 +2,7 @@ export type {
   TDashboardCard,
   TDashboardFull,
   TDashboardFilter,
+  TDashboardCreateRequest,
   IDashboardMetric,
   IChartProps,
 } from './model/dashboardTypes';
