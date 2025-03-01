@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { AppChart, IChartProps } from 'entities/Chart';
+import { IChartProps } from 'entities/Dashboard';
+import { DashboardChartWidget } from 'entities/Dashboard';
 
 import { testReportPageApi } from '../api/testReportPageApi';
 
@@ -35,12 +36,14 @@ export function TestReportPage() {
         alignItems: 'center',
       }}
     >
-      <AppChart
-        title={'Процент побед каждого поставщика'}
+      <DashboardChartWidget
         type={'bar'}
         data={data}
         categories={categories}
         horizontal
+        detail={{
+          title: 'Процент побед каждого поставщика',
+        }}
       />
     </div>
   );

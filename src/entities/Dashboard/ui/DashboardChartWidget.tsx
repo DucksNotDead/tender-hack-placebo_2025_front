@@ -1,33 +1,28 @@
-import { Card } from 'antd';
 import { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
+import { useResizeDetector } from 'react-resize-detector';
 
-import { IChartProps } from '../model/chartTypes';
+import { IChartProps } from '../model/dashboardTypes';
+import { generateColor } from '../lib/generateColor';
 
-function generateColor(index: number, totalItems: number) {
-  const hue = (index / totalItems) * 360; // Распределяем оттенки равномерно по кругу
-  return `hsla(${hue}, 70%, 50%, 0.7)`; // HSLA с 50% прозрачностью
-}
+import Styles from './DashboarChartWidget.module.scss';
 
-export function AppChart({
-  smooth,
-  title,
+export function DashboardChartWidget({
   type,
   horizontal,
   data,
   categories,
-  dataSwitch,
-  min,
-  max,
+  detail,
 }: IChartProps) {
-  const wrapper = useRef<HTMLDivElement>(null);
+  const { width, ref: wrapper } = useResizeDetector();
+  const chartBox = useRef<HTMLDivElement>(null);
   const chart = useRef<echarts.EChartsType | null>(null);
 
   useEffect(() => {
-    if (wrapper.current && !chart.current) {
-      chart.current = echarts.init(wrapper.current);
+    if (chartBox.current && !chart.current) {
+      chart.current = echarts.init(chartBox.current);
     }
-  }, [wrapper, chart]);
+  }, [chartBox, chart]);
 
   useEffect(() => {
     const { dataAxis, categoryAxis } = horizontal
@@ -50,23 +45,24 @@ export function AppChart({
       [dataAxis]: {
         type: 'value',
         interval: minValue,
-        min: min && 0,
-        max: max && maxValue + (maxValue % minValue),
+        min: detail?.min ?? 0,
+        max: detail?.max ?? maxValue + (maxValue % minValue),
         nameGap: 200,
       },
-      legend: dataSwitch
+      legend: detail?.dataSwitch
         ? {
             data: data.map(({ name }) => name),
           }
         : undefined,
       title: {
-        text: title,
+        text: detail?.title,
       },
       tooltip: {
+        show: !!detail,
         trigger: 'axis',
       },
       toolbox: {
-        show: true,
+        show: !!detail,
         feature: {
           saveAsImage: { show: true },
         },
@@ -88,16 +84,24 @@ export function AppChart({
         itemStyle: {
           color: generateColor(index, data.length),
         },
-        smooth,
+        smooth: detail?.smooth,
         type,
       })),
     };
     chart.current?.setOption(option);
-  }, [chart, data, horizontal, title]);
+  }, [chart, data, horizontal, detail]);
+
+  useEffect(() => {
+    const validatedWidth = Math.min(Math.max(width ?? 0, 300), 400);
+    chart.current?.resize({
+      width: validatedWidth,
+      height: validatedWidth / 1.2,
+    });
+  }, [chart, width]);
 
   return (
-    <Card>
-      <div ref={wrapper} style={{ width: 1700, height: 300 }}></div>
-    </Card>
+    <div ref={wrapper} className={Styles.wrapper}>
+      <div ref={chartBox}></div>
+    </div>
   );
 }

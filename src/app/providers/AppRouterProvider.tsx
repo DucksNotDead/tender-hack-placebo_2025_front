@@ -11,7 +11,7 @@ import { appRoutes } from 'shared/appRoutes';
 import { AuthPage } from 'pages/AuthPage';
 import { DashboardPage } from 'pages/DashboardPage';
 import { useAuth } from 'entities/Auth';
-import { TestReportPage } from 'pages/TestReportPage';
+import { HomePage } from 'pages/HomePage';
 
 export function AppRouterProvider() {
   const { isAuth } = useAuth();
@@ -26,13 +26,11 @@ export function AppRouterProvider() {
   return (
     <Routes>
       {isAuth && (
-        <>
-          <Route path={appRoutes.home} element={<TestReportPage />} />
-          <Route
-            path={`${appRoutes.dashboard}/:guid`}
-            element={<DashboardPage />}
-          />
-        </>
+        <Route
+          path={appRoutes.home}
+          element={<HomePage />}
+          children={<Route path={`${appRoutes}/:guid`} element={<DashboardPage />} />}
+        />
       )}
       <Route path={appRoutes.auth} element={<AuthPage />} />
       <Route path={'*'} element={<Navigate to={appRoutes.home} />} />

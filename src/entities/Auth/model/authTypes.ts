@@ -2,6 +2,7 @@ export interface IAuthUser {
   id: number;
   email: string;
   full_name: string;
+  supplier_id: number;
 }
 
 export interface IAuthCredits {

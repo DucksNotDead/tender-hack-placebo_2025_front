@@ -1,24 +1,36 @@
-import { Space } from 'antd';
+import { DashboardCard, TDashboardCard } from 'entities/Dashboard';
 
-import { AppChart } from 'entities/Chart/ui/AppChart';
+import Styles from './HomePage.module.scss';
+
+const dashboards: TDashboardCard[] = [
+  {
+    id: '123',
+    title: 'Дашборд',
+    owner: {
+      "id": 1,
+      "full_name": "Михайлов Даниил Александрович",
+      "email": "mikhaylov_danilka03@mail.ru",
+      "supplier_id": 1,
+    },
+    mainChart: {
+      type: 'bar',
+      data: [{ name: 'Prop1', values: [1, 4, 2] }],
+      categories: ['1', '2', '3'],
+    },
+    metrics: [],
+    properties: [],
+    subscribers: [],
+  },
+];
 
 export function HomePage() {
   return (
-    <Space>
-      <AppChart
-        title={'Qwerty'}
-        type={'bar'}
-        data={[
-          { name: 'first', values: [2, 3, 2] },
-          { name: 'before', values: [3, 4, 5] },
-        ]}
-        categories={['One', 'Two', 'Three']}
-        dataSwitch
-        max={100}
-      />
-    </Space>
+    <div className={Styles.main}>
+      <div className={Styles.wrapper}>
+        {dashboards.map((dashboard) => (
+          <DashboardCard key={dashboard.id} {...dashboard} />
+        ))}
+      </div>
+    </div>
   );
 }
-
-//kpgz.code_kpgz
-//
