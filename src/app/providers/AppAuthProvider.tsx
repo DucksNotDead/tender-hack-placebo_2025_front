@@ -39,7 +39,7 @@ export function AppAuthProvider({ children }: IProps) {
 
   const logout = useCallback(() => {
     setLocalToken(null);
-    setAuthValue(() => authDefaultContextValue)
+    setAuthValue(() => authDefaultContextValue);
   }, [setLocalToken]);
 
   const { mutate: auth } = useMutation({
@@ -61,6 +61,7 @@ export function AppAuthProvider({ children }: IProps) {
     mutationKey: ['login', setLocalToken, message, logout],
     mutationFn: authApi.login,
     onSuccess: ({ data }) => {
+      void message.success(appMessages.loginSuccess);
       setLocalToken(data.access_token);
     },
     onError: () => {
