@@ -15,6 +15,7 @@ export interface IChartProps {
     max?: number;
     created_at?: string;
     updated_at?: string;
+    width?: number;
   };
 }
 
@@ -32,7 +33,11 @@ export interface IDashboardMetric {
   unit: string;
 }
 
-export type TDashboardFilter = Record<string, string>;
+export type TDashboardFilter = {
+  start_date: string;
+  end_date: string;
+
+};
 
 interface IDashboardBase {
   id: string;

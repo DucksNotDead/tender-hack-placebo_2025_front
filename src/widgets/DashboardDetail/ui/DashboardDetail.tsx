@@ -69,19 +69,20 @@ const dashboard: TDashboardFull = {
       supplier_id: 2,
     },
   ],
-  filters: {},
+  filters: {
+    start_date: '2023-02-20',
+    end_date: '2024-02-28',
+  },
 };
 
 export function DashboardDetail() {
   return (
     <div className={Styles.main}>
-      <Col xs={18}>
+      <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <DashboardDetailMetricsSection metrics={dashboard.metrics} />
-        <DashboardDetailChartsSection charts={dashboard.charts} />
-      </Col>
-      <Col xs={6}>
-        <DashboardDetailFiltersSection filters={dashboard.filters} />
-      </Col>
+        <DashboardDetailChartsSection filters={dashboard.filters} />
+      </div>
+      <DashboardDetailFiltersSection filters={dashboard.filters} />
     </div>
   );
 }

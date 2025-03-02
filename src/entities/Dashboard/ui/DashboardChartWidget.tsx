@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 import { useResizeDetector } from 'react-resize-detector';
-import { motion } from 'framer-motion'
 
 import { IChartProps } from '../model/dashboardTypes';
 import { generateColor } from '../lib/generateColor';
@@ -93,12 +92,12 @@ export function DashboardChartWidget({
   }, [chart, data, horizontal, detail]);
 
   useEffect(() => {
-    const validatedWidth = Math.min(Math.max(width ?? 0, 300), 400);
+    const validatedWidth = detail?.width ?? Math.min(Math.max(width ?? 0, 300), 400);
     chart.current?.resize({
       width: validatedWidth,
       height: validatedWidth / 1.2,
     });
-  }, [chart, width]);
+  }, [chart, width, detail?.width]);
 
   return (
     <div ref={wrapper} className={Styles.wrapper}>

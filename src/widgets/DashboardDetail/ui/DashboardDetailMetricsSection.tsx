@@ -1,5 +1,5 @@
-import { Button, Row, Select, Space, Typography } from 'antd';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { Button, Select, Space, Typography } from 'antd';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
 
@@ -41,15 +41,18 @@ export function DashboardDetailMetricsSection({ metrics }: IProps) {
             initial={false}
             animate={{ rotate: isCreateMode ? '45deg' : '0deg' }}
           >
-            <Button shape={'circle'} icon={<PlusCircleOutlined />}/>
+            <Button
+              onClick={() => setIsCreateMode((prevState) => !prevState)}
+              shape={'circle'}
+              icon={<PlusCircleOutlined />}
+            />
           </motion.div>
           <motion.div
             initial={false}
             animate={{ width: isCreateMode ? '100%' : 0 }}
+            style={{ overflow: 'hidden' }}
           >
-            <LayoutGroup>
-              <Select />
-            </LayoutGroup>
+            <Select style={{ width: 320 }} />
           </motion.div>
         </Space>
       </motion.div>
