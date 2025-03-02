@@ -32,7 +32,10 @@ export function HomePageCreateDashboardForm({ hidden }: IProps) {
   const { mutate: createDashboard } = useMutation({
     mutationKey: ['createDashboard'],
     mutationFn: dashboardsApi.createDashboard,
-    onSuccess: ({ data }) => {},
+    onSuccess: ({ data }) => {
+      void message.success(appMessages.createDashboardSuccess);
+      handleClose();
+    },
     onError: () => {
       void message.error(appMessages.createDashboardError);
     },
@@ -102,9 +105,10 @@ export function HomePageCreateDashboardForm({ hidden }: IProps) {
             <Select
               mode="multiple"
               allowClear
+              optionFilterProp="label"
               options={properties}
               loading={propertiesPending}
-              placeholder={'Данные дашборда(оставить пустым для всех данных)'}
+              placeholder={'Данные дашборда (оставить пустым для всех данных)'}
             />
           </Form.Item>
         </Form>
