@@ -1,7 +1,7 @@
 import { Button, Select, Space, Typography } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 import { TDashboardFull } from 'entities/Dashboard';
 
@@ -11,8 +11,39 @@ interface IProps {
   metrics: TDashboardFull['metrics'];
 }
 
+const aggregationFunctions = [
+  {
+    label: 'Сумма',
+    value: 'SUM',
+  },
+  {
+    label: 'Среднее',
+    value: 'AVG',
+  },
+  {
+    label: 'Максимум',
+    value: 'MAX',
+  },
+  {
+    label: 'Минимум',
+    value: 'MIN',
+  },
+  {
+    label: 'Количество',
+    value: 'COUNT',
+  },
+];
+
 export function DashboardDetailMetricsSection({ metrics }: IProps) {
   const [isCreateMode, setIsCreateMode] = useState(false);
+  const [isCreateModeStepOne, setIsCreateModeStepOne] = useState(false);
+  const [isCreateModeStepTwo, setIsCreateModeStepTwo] = useState(false);
+  const [isCreateModeStepThree, setIsCreateModeStepThree] = useState(true);
+
+  const mappedMetrics = metrics.map((metric) => ({
+    label: metric.name,
+    value: metric.value,
+  }));
 
   return (
     <Space size={'large'} className={Styles.main}>
@@ -23,7 +54,7 @@ export function DashboardDetailMetricsSection({ metrics }: IProps) {
               {metrics
                 .filter((_, i) => i < 4)
                 .map((metric) => (
-                  <motion.div className={Styles.metricItem}>
+                  <motion.div className={Styles.metricItem} key={metric.id}>
                     <Typography.Text>{metric.name}</Typography.Text>
                     <Typography.Text>
                       {metric.value}
@@ -42,18 +73,62 @@ export function DashboardDetailMetricsSection({ metrics }: IProps) {
             animate={{ rotate: isCreateMode ? '45deg' : '0deg' }}
           >
             <Button
-              onClick={() => setIsCreateMode((prevState) => !prevState)}
+              onClick={() => {
+                setIsCreateMode((prevState) => !prevState);
+                setIsCreateModeStepOne((prevState) => !prevState);
+                setIsCreateModeStepTwo(false);
+                setIsCreateModeStepThree(true);
+              }}
               shape={'circle'}
               icon={<PlusCircleOutlined />}
             />
           </motion.div>
-          <motion.div
-            initial={false}
-            animate={{ width: isCreateMode ? '100%' : 0 }}
-            style={{ overflow: 'hidden' }}
-          >
-            <Select style={{ width: 320 }} />
-          </motion.div>
+          {isCreateMode && (
+            <>
+              <motion.div
+                initial={false}
+                animate={{ width: isCreateModeStepOne ? '100%' : 0 }}
+                style={{ overflow: 'hidden' }}
+              >
+                <Select
+                  allowClear
+                  optionFilterProp="label"
+                  options={aggregationFunctions}
+                  placeholder={'Выберите агрегатную функцию'}
+                  onSelect={() =>
+                    setIsCreateModeStepTwo((prevState) => !prevState)
+                  }
+                  style={{ width: 280 }}
+                />
+              </motion.div>
+              <motion.div
+                initial={false}
+                animate={{ width: isCreateModeStepTwo ? '100%' : 0 }}
+                style={{ overflow: 'hidden' }}
+              >
+                <Select
+                  allowClear
+                  optionFilterProp="label"
+                  options={mappedMetrics}
+                  placeholder={'Выберите агрегатную функцию'}
+                  onSelect={() =>
+                    setIsCreateModeStepThree((prevState) => !prevState)
+                  }
+                  style={{ width: 280 }}
+                />
+              </motion.div>
+              <motion.div
+                initial={false}
+                animate={{ x: isCreateModeStepThree ? '100vh' : 0 }}
+                transition={{
+                  bounce: 0,
+                }}
+                style={{ overflow: 'hidden' }}
+              >
+                <Button shape={'circle'} icon={<CheckCircleOutlined />} />
+              </motion.div>
+            </>
+          )}
         </Space>
       </motion.div>
     </Space>

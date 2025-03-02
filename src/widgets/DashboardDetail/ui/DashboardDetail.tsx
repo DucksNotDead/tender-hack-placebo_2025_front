@@ -4,7 +4,7 @@ import { TDashboardFull } from 'entities/Dashboard';
 import { DashboardDetailMetricsSection } from './DashboardDetailMetricsSection';
 import { DashboardDetailFiltersSection } from './DashboardDetailFiltersSection';
 import { DashboardDetailChartsSection } from './DashboardDetailChartsSection';
-import Styles from './DashboardDetail.module.scss'
+import Styles from './DashboardDetail.module.scss';
 
 const dashboard: TDashboardFull = {
   id: '123',
@@ -25,33 +25,27 @@ const dashboard: TDashboardFull = {
   metrics: [
     {
       id: 1,
-      value: 12,
-      name: 'Перовое поле',
-      unit: '%',
+      value: 4789.05,
+      name: 'Индекс Херфиндаля-Хиршмана',
+      unit: '',
     },
     {
       id: 2,
-      value: 6723,
-      name: 'Второе поле',
-      unit: '',
+      value: 55.2,
+      name: 'Доля побед в КС',
+      unit: '%',
     },
     {
       id: 3,
-      value: 6723,
-      name: 'Второе поле',
-      unit: '',
+      value: 1052070,
+      name: 'Выручка',
+      unit: 'руб.',
     },
     {
       id: 4,
-      value: 6723,
-      name: 'Второе поле',
-      unit: '',
-    },
-    {
-      id: 5,
-      value: 6723,
-      name: 'Второе поле',
-      unit: '',
+      value: 4529.78,
+      name: 'Среднее снижение цены КС',
+      unit: 'руб.',
     },
   ],
   properties: [],

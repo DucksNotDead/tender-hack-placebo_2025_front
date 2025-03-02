@@ -4,9 +4,22 @@
 }
 
 .metricItem {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1/1;
+  height: 100px;
 
+  & > span:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  & > span:nth-child(2) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent 100%);
+    padding: 5px 15px;
+    border-radius: 5px;
+  }
+  & > div {
+    margin-top: 15px;
+  }
 }
