@@ -9,6 +9,7 @@ import { dashboardDetailApi } from 'widgets/DashboardDetail/api/dashboardDetailA
 import { useAuth } from 'entities/Auth';
 
 import Styles from './DashboardDetailMetricsSection.module.scss';
+import { propertiesApi } from 'entities/Property';
 
 interface IProps {
   filters: TDashboardFull['filters'];
@@ -44,13 +45,11 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
   const [isCreateModeStepThree, setIsCreateModeStepThree] = useState(true);
   const { user } = useAuth();
 
+  const [propertyName, setPropertyName] = useState();
+  const [functionName, setFunctionName] = useState();
+
   const { data: hhi_index } = useQuery({
-    queryKey: [
-      'hhi_index',
-      filters.start_date,
-      filters.end_date,
-      user,
-    ],
+    queryKey: ['hhi_index', filters.start_date, filters.end_date, user],
     queryFn: () =>
       dashboardDetailApi.hhi_index(
         user?.supplier_id!,
@@ -60,12 +59,7 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
   });
 
   const { data: win_rate } = useQuery({
-    queryKey: [
-      'win_rate',
-      filters.start_date,
-      filters.end_date,
-      user,
-    ],
+    queryKey: ['win_rate', filters.start_date, filters.end_date, user],
     queryFn: () =>
       dashboardDetailApi.win_rate(
         user?.supplier_id!,
@@ -90,12 +84,7 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
   });
 
   const { data: my_revenue } = useQuery({
-    queryKey: [
-      'my_revenue',
-      filters.start_date,
-      filters.end_date,
-      user,
-    ],
+    queryKey: ['my_revenue', filters.start_date, filters.end_date, user],
     queryFn: () =>
       dashboardDetailApi.my_revenue(
         user?.supplier_id!,
@@ -104,8 +93,20 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
       ),
   });
 
+  const { data: propertiesData } = useQuery({
+    queryKey: ['properties'],
+    queryFn: () => propertiesApi.get(),
+  });
+
+  const mappedProperties = propertiesData?.map((property) => ({
+    label: property.label,
+    value: property.value,
+  }));
+
   const metrics = useMemo<TDashboardFull['metrics']>(() => {
-    return [my_revenue, avg_reduction_percent, win_rate, hhi_index].map(item => item?.data) as any
+    return [my_revenue, avg_reduction_percent, win_rate, hhi_index].map(
+      (item) => item?.data,
+    ) as any;
   }, [my_revenue, avg_reduction_percent, win_rate, hhi_index]);
 
   const mappedMetrics = metrics.map((metric) => ({
@@ -119,16 +120,15 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
         {!isCreateMode && (
           <motion.div>
             <Space size={'large'}>
-              {metrics
-                .map((metric) => (
-                  <motion.div className={Styles.metricItem} key={metric?.name}>
-                    <Typography.Text>{metric?.name}</Typography.Text>
-                    <Typography.Text>
-                      {metric?.value}
-                      {metric?.unit}
-                    </Typography.Text>
-                  </motion.div>
-                ))}
+              {metrics.map((metric) => (
+                <motion.div className={Styles.metricItem} key={metric?.name}>
+                  <Typography.Text>{metric?.name}</Typography.Text>
+                  <Typography.Text>
+                    {metric?.value}
+                    {metric?.unit}
+                  </Typography.Text>
+                </motion.div>
+              ))}
             </Space>
           </motion.div>
         )}
@@ -161,6 +161,7 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
                   allowClear
                   optionFilterProp="label"
                   options={aggregationFunctions}
+                  value={functionName}
                   placeholder={'Выберите агрегатную функцию'}
                   onSelect={() =>
                     setIsCreateModeStepTwo((prevState) => !prevState)
@@ -176,8 +177,9 @@ export function DashboardDetailMetricsSection({ filters }: IProps) {
                 <Select
                   allowClear
                   optionFilterProp="label"
-                  options={mappedMetrics}
-                  placeholder={'Выберите агрегатную функцию'}
+                  options={mappedProperties}
+                  value={propertyName}
+                  placeholder={'Выберите названия свойства'}
                   onSelect={() =>
                     setIsCreateModeStepThree((prevState) => !prevState)
                   }
