@@ -27,7 +27,6 @@ export interface IDashboardSubscriber {
 }
 
 export interface IDashboardMetric {
-  id: number;
   name: string;
   value: number;
   unit: string;

@@ -10,3 +10,7 @@
   --grey-shadow: 0px 0px 12px 0px rgba(185, 185, 198, 0.8);
   --grey-shadow-active: 0px 0px 12px 0px rgba(185, 185, 198, 0.8);
 }
+
+.ant-app{
+  height: 100vh;
+}

@@ -5,6 +5,7 @@ import { appRoutes } from 'shared/appRoutes';
 import { useAuth } from 'entities/Auth';
 import { HomePage } from 'pages/HomePage';
 import { DashboardDetail } from 'widgets/DashboardDetail';
+import { Spin } from 'antd';
 
 interface IGuardProps {
   children: ReactNode;
@@ -17,7 +18,17 @@ function Guard({ children, isAuth }: IGuardProps) {
       {isAuth ? (
         children
       ) : (
-        <div style={{ width: '100%', height: '100%' }}></div>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Spin spinning={true} size={'large'}/>
+        </div>
       )}
     </>
   );

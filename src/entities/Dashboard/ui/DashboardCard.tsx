@@ -16,7 +16,7 @@ export function DashboardCard({
   metrics,
   owner,
   subscribers,
-  onClick
+  onClick,
 }: TDashboardCard & {
   onClick?: () => void;
 }) {
@@ -45,12 +45,12 @@ export function DashboardCard({
             {metrics
               .filter((_, index) => index < 4)
               .map((metric) => (
-                <div key={metric.id} className={Styles.metricItem}>
+                <div key={metric?.name} className={Styles.metricItem}>
                   <Typography.Text type={'secondary'}>
-                    {metric.name}
+                    {metric?.name}
                   </Typography.Text>
 
-                  <Typography.Text>{metric.value}</Typography.Text>
+                  <Typography.Text>{metric?.value}</Typography.Text>
                 </div>
               ))}
           </div>

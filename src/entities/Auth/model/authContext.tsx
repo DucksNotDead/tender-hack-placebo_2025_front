@@ -7,6 +7,7 @@ export const authDefaultContextValue: TAuthContextValue = {
   user: null,
   login: () => {},
   logout: () => {},
+  setUserSupplierId: () => {}
 };
 
 export const authContext = createContext<TAuthContextValue>(

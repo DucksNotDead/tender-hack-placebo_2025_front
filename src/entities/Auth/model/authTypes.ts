@@ -27,4 +27,5 @@ export type TAuthValue =
 export type TAuthContextValue = {
   login: (credits: IAuthCredits) => void;
   logout: () => void;
+  setUserSupplierId: (supplierId: number) => void;
 } & TAuthValue;

@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { DashboardCard, TDashboardCard } from 'entities/Dashboard';
 
@@ -25,34 +24,24 @@ const dashboards: TDashboardCard[] = [
     },
     metrics: [
       {
-        id: 1,
         value: 12,
-        name: 'Перовое поле',
+        name: 'Индекс Херфиндаля-Хиршмана',
+        unit: '',
+      },
+      {
+        value: 6723,
+        name: 'Доля побед в КС',
         unit: '%',
       },
       {
-        id: 2,
         value: 6723,
-        name: 'Второе поле',
-        unit: '',
+        name: 'Среднее снижение цены',
+        unit: '%',
       },
       {
-        id: 3,
         value: 6723,
-        name: 'Второе поле',
-        unit: '',
-      },
-      {
-        id: 4,
-        value: 6723,
-        name: 'Второе поле',
-        unit: '',
-      },
-      {
-        id: 5,
-        value: 6723,
-        name: 'Второе поле',
-        unit: '',
+        name: 'Общая выручка',
+        unit: 'руб.',
       },
     ],
     properties: [],

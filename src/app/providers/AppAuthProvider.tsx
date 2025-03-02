@@ -70,6 +70,15 @@ export function AppAuthProvider({ children }: IProps) {
     },
   });
 
+  const setUserSupplierId = useCallback((supplierId: number) => {
+    setAuthValue(({ isAuth, user }) => {
+      if (user) {
+        user.supplier_id = supplierId;
+      }
+      return { isAuth, user } as TAuthValue;
+    });
+  }, []);
+
   useEffect(() => {
     if (localToken) {
       auth(localToken);
@@ -77,7 +86,7 @@ export function AppAuthProvider({ children }: IProps) {
   }, [localToken, auth]);
 
   return (
-    <authContext.Provider value={{ ...authValue, login, logout }}>
+    <authContext.Provider value={{ ...authValue, login, logout, setUserSupplierId }}>
       {children}
     </authContext.Provider>
   );

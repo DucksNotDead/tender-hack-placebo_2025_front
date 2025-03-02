@@ -1,14 +1,17 @@
 import { Button, Select, Space, Typography } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CheckCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
 
 import { TDashboardFull } from 'entities/Dashboard';
+import { dashboardDetailApi } from 'widgets/DashboardDetail/api/dashboardDetailApi';
+import { useAuth } from 'entities/Auth';
 
 import Styles from './DashboardDetailMetricsSection.module.scss';
 
 interface IProps {
-  metrics: TDashboardFull['metrics'];
+  filters: TDashboardFull['filters'];
 }
 
 const aggregationFunctions = [
@@ -34,15 +37,80 @@ const aggregationFunctions = [
   },
 ];
 
-export function DashboardDetailMetricsSection({ metrics }: IProps) {
+export function DashboardDetailMetricsSection({ filters }: IProps) {
   const [isCreateMode, setIsCreateMode] = useState(false);
   const [isCreateModeStepOne, setIsCreateModeStepOne] = useState(false);
   const [isCreateModeStepTwo, setIsCreateModeStepTwo] = useState(false);
   const [isCreateModeStepThree, setIsCreateModeStepThree] = useState(true);
+  const { user } = useAuth();
+
+  const { data: hhi_index } = useQuery({
+    queryKey: [
+      'hhi_index',
+      filters.start_date,
+      filters.end_date,
+      user,
+    ],
+    queryFn: () =>
+      dashboardDetailApi.hhi_index(
+        user?.supplier_id!,
+        filters.start_date,
+        filters.end_date,
+      ),
+  });
+
+  const { data: win_rate } = useQuery({
+    queryKey: [
+      'win_rate',
+      filters.start_date,
+      filters.end_date,
+      user,
+    ],
+    queryFn: () =>
+      dashboardDetailApi.win_rate(
+        user?.supplier_id!,
+        filters.start_date,
+        filters.end_date,
+      ),
+  });
+
+  const { data: avg_reduction_percent } = useQuery({
+    queryKey: [
+      'avg_reduction_percent',
+      filters.start_date,
+      filters.end_date,
+      user,
+    ],
+    queryFn: () =>
+      dashboardDetailApi.avg_reduction_percent(
+        user?.supplier_id!,
+        filters.start_date,
+        filters.end_date,
+      ),
+  });
+
+  const { data: my_revenue } = useQuery({
+    queryKey: [
+      'my_revenue',
+      filters.start_date,
+      filters.end_date,
+      user,
+    ],
+    queryFn: () =>
+      dashboardDetailApi.my_revenue(
+        user?.supplier_id!,
+        filters.start_date,
+        filters.end_date,
+      ),
+  });
+
+  const metrics = useMemo<TDashboardFull['metrics']>(() => {
+    return [my_revenue, avg_reduction_percent, win_rate, hhi_index].map(item => item?.data) as any
+  }, [my_revenue, avg_reduction_percent, win_rate, hhi_index]);
 
   const mappedMetrics = metrics.map((metric) => ({
-    label: metric.name,
-    value: metric.value,
+    label: metric?.name,
+    value: metric?.value,
   }));
 
   return (
@@ -52,13 +120,12 @@ export function DashboardDetailMetricsSection({ metrics }: IProps) {
           <motion.div>
             <Space size={'large'}>
               {metrics
-                .filter((_, i) => i < 4)
                 .map((metric) => (
-                  <motion.div className={Styles.metricItem} key={metric.id}>
-                    <Typography.Text>{metric.name}</Typography.Text>
+                  <motion.div className={Styles.metricItem} key={metric?.name}>
+                    <Typography.Text>{metric?.name}</Typography.Text>
                     <Typography.Text>
-                      {metric.value}
-                      {metric.unit}
+                      {metric?.value}
+                      {metric?.unit}
                     </Typography.Text>
                   </motion.div>
                 ))}
