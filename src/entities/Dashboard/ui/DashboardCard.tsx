@@ -1,20 +1,22 @@
-import { Card, Row, Space, Typography } from 'antd';
 import { useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Card, Row, Space, Typography } from 'antd';
 
 import { useAuth } from 'entities/Auth';
+import { DashboardChartWidget } from 'entities/Dashboard';
 
 import type { TDashboardCard } from '../model/dashboardTypes';
 
-import { DashboardChartWidget } from './DashboardChartWidget';
 import Styles from './DashboardCard.module.scss';
 
 export function DashboardCard({
+  id,
   title,
   mainChart,
   metrics,
   owner,
   subscribers,
-  onClick,
+  onClick
 }: TDashboardCard & {
   onClick?: () => void;
 }) {
@@ -36,37 +38,39 @@ export function DashboardCard({
   }, [subscribers, user]);
 
   return (
-    <Card className={Styles.main} onClick={onClick}>
-      <Space direction={'vertical'} style={{ width: '100%' }}>
-        <div className={Styles.header}>
-          {metrics
-            .filter((_, index) => index < 4)
-            .map((metric) => (
-              <div key={metric.id} className={Styles.metricItem}>
-                <Typography.Text type={'secondary'}>
-                  {metric.name}
-                </Typography.Text>
+    <motion.div layoutId={`card-${id}`}>
+      <Card className={Styles.main} onClick={onClick}>
+        <Space direction={'vertical'} style={{ width: '100%' }}>
+          <div className={Styles.header}>
+            {metrics
+              .filter((_, index) => index < 4)
+              .map((metric) => (
+                <div key={metric.id} className={Styles.metricItem}>
+                  <Typography.Text type={'secondary'}>
+                    {metric.name}
+                  </Typography.Text>
 
-                <Typography.Text>{metric.value}</Typography.Text>
-              </div>
-            ))}
-        </div>
-        <DashboardChartWidget {...mainChart} />
-        <div className={Styles.footer}>
-          <Row align={'middle'} justify={'space-between'}>
-            <Typography.Title level={3} style={{ margin: 0 }}>
-              {title}
-            </Typography.Title>
-            <Typography.Text type={'secondary'}>{ownerName}</Typography.Text>
-          </Row>
-          <Row>
-            <Typography.Text type={'secondary'}>
-              <Typography.Text strong>Подписаны: </Typography.Text>
-              {subscribersNames}
-            </Typography.Text>
-          </Row>
-        </div>
-      </Space>
-    </Card>
+                  <Typography.Text>{metric.value}</Typography.Text>
+                </div>
+              ))}
+          </div>
+          <DashboardChartWidget {...mainChart} />
+          <div className={Styles.footer}>
+            <Row align={'middle'} justify={'space-between'}>
+              <Typography.Title level={3} style={{ margin: 0 }}>
+                {title}
+              </Typography.Title>
+              <Typography.Text type={'secondary'}>{ownerName}</Typography.Text>
+            </Row>
+            <Row>
+              <Typography.Text type={'secondary'}>
+                <Typography.Text strong>Подписаны: </Typography.Text>
+                {subscribersNames}
+              </Typography.Text>
+            </Row>
+          </div>
+        </Space>
+      </Card>
+    </motion.div>
   );
 }

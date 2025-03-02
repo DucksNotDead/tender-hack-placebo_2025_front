@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useCallback, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
 
 import { DashboardCard, TDashboardCard } from 'entities/Dashboard';
-import { appRoutes } from 'shared/appRoutes';
 
 import { HomePageCreateDashboardForm } from './HomePageCreateDashboardForm';
 import Styles from './HomePage.module.scss';
+import { DashboardDetail } from 'widgets/DashboardDetail';
 
 const dashboards: TDashboardCard[] = [
   {
@@ -73,14 +74,15 @@ const dashboards: TDashboardCard[] = [
 ];
 
 export function HomePage() {
-  const navigate = useNavigate();
+  const [selectedCard, setSelectedCard] = useState<TDashboardCard | null>(null);
 
-  const handleCardClick = useCallback(
-    (id: string) => {
-      navigate(`${appRoutes.dashboards}/${id}`);
-    },
-    [navigate],
-  );
+  const handleCardClick = useCallback((card: TDashboardCard) => {
+    setSelectedCard(() => card);
+  }, []);
+
+  const handleOverlayClick = useCallback(() => {
+    setSelectedCard(() => null);
+  }, []);
 
   return (
     <div className={Styles.main}>
@@ -89,11 +91,38 @@ export function HomePage() {
           <DashboardCard
             key={dashboard.id}
             {...dashboard}
-            onClick={() => handleCardClick(dashboard.id)}
+            onClick={() => handleCardClick(dashboard)}
           />
         ))}
       </div>
-      <HomePageCreateDashboardForm />
+      <AnimatePresence>
+        {selectedCard && (
+          <motion.div
+            initial={{
+              backdropFilter: 'blur(0px)',
+              backgroundColor: 'rgba(0,0,0,0)',
+            }}
+            animate={{
+              backdropFilter: 'blur(12px)',
+              backgroundColor: 'rgba(0,0,0,.4)',
+            }}
+            exit={{
+              backdropFilter: 'blur(0px)',
+              backgroundColor: 'rgba(0,0,0,0)',
+            }}
+            className={Styles.cardOverlay}
+            onClick={handleOverlayClick}
+          >
+            <motion.div
+              layoutId={`card-${selectedCard.id}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <DashboardDetail/>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <HomePageCreateDashboardForm hidden={!!selectedCard}/>
     </div>
   );
 }

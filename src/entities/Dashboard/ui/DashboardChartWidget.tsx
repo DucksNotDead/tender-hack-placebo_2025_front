@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 import { useResizeDetector } from 'react-resize-detector';
+import { motion } from 'framer-motion'
 
 import { IChartProps } from '../model/dashboardTypes';
 import { generateColor } from '../lib/generateColor';

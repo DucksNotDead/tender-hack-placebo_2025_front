@@ -48,15 +48,3 @@
   margin-top: -10%;
   gap: 24px;
 }
-
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-
-  box-shadow: var(--blue-light-shadow) !important;
-
-  &:hover {
-    box-shadow: var(--grey-shadow-active) !important;
-  }
-}

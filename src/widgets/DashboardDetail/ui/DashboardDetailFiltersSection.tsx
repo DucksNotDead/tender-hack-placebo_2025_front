@@ -4,6 +4,6 @@ interface IProps {
   filters: TDashboardFull['filters'];
 }
 
-export function DashboardPageFiltersSection({ filters }: IProps) {
+export function DashboardDetailFiltersSection({ filters }: IProps) {
   return <></>;
 }

@@ -4,7 +4,7 @@ import { JSX, ReactNode } from 'react';
 import { appRoutes } from 'shared/appRoutes';
 import { useAuth } from 'entities/Auth';
 import { HomePage } from 'pages/HomePage';
-import { DashboardPage } from 'pages/DashboardPage';
+import { DashboardDetail } from 'widgets/DashboardDetail';
 
 interface IGuardProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ export function AppRouterProvider() {
       />
       <Route
         path={`${appRoutes.dashboards}/:guid`}
-        element={<Guard isAuth={isAuth} children={<DashboardPage />} />}
+        element={<Guard isAuth={isAuth} children={<DashboardDetail />} />}
       />
       <Route path={'*'} element={<Navigate to={appRoutes.home} />} />
     </Routes>

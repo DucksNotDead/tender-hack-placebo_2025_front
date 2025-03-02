@@ -4,6 +4,6 @@ interface IProps {
   charts: TDashboardFull['charts'];
 }
 
-export function DashboardPageChartsSection({ charts }: IProps) {
+export function DashboardDetailChartsSection({ charts }: IProps) {
   return <></>;
 }

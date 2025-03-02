@@ -1,10 +1,10 @@
 import { Col, Row } from 'antd';
-
 import { TDashboardFull } from 'entities/Dashboard';
 
-import { DashboardPageMetricsSection } from './DashboardPageMetricsSection';
-import { DashboardPageFiltersSection } from './DashboardPageFiltersSection';
-import { DashboardPageChartsSection } from 'pages/DashboardPage/ui/DashboardPageChartsSection';
+import { DashboardDetailMetricsSection } from './DashboardDetailMetricsSection';
+import { DashboardDetailFiltersSection } from './DashboardDetailFiltersSection';
+import { DashboardDetailChartsSection } from './DashboardDetailChartsSection';
+import Styles from './DashboardDetail.module.scss'
 
 const dashboard: TDashboardFull = {
   id: '123',
@@ -72,16 +72,16 @@ const dashboard: TDashboardFull = {
   filters: {},
 };
 
-export function DashboardPage() {
+export function DashboardDetail() {
   return (
-    <Row>
+    <div className={Styles.main}>
       <Col xs={18}>
-        <DashboardPageMetricsSection metrics={dashboard.metrics} />
-        <DashboardPageChartsSection charts={dashboard.charts} />
+        <DashboardDetailMetricsSection metrics={dashboard.metrics} />
+        <DashboardDetailChartsSection charts={dashboard.charts} />
       </Col>
       <Col xs={6}>
-        <DashboardPageFiltersSection filters={dashboard.filters} />
+        <DashboardDetailFiltersSection filters={dashboard.filters} />
       </Col>
-    </Row>
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import { Button, Form, Input, Modal, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 
 import { appMessages } from 'shared/appMessages';
 import { dashboardsApi, TDashboardCreateRequest } from 'entities/Dashboard';
@@ -9,9 +10,13 @@ import { useInstance } from 'shared/useInstance';
 import { useAuth } from 'entities/Auth';
 import { propertiesApi } from 'entities/Property';
 
-import Styles from './HomePageCreateDashboardForm.module.scss'
+import Styles from './HomePageCreateDashboardForm.module.scss';
 
-export function HomePageCreateDashboardForm() {
+interface IProps {
+  hidden: boolean;
+}
+
+export function HomePageCreateDashboardForm({ hidden }: IProps) {
   const [isCreationOpened, setIsCreationOpened] = useState(false);
   const [form] = Form.useForm<TDashboardCreateRequest>();
   const allFields = Form.useWatch([], form);
@@ -27,9 +32,7 @@ export function HomePageCreateDashboardForm() {
   const { mutate: createDashboard } = useMutation({
     mutationKey: ['createDashboard'],
     mutationFn: dashboardsApi.createDashboard,
-    onSuccess: ({ data }) => {
-
-    },
+    onSuccess: ({ data }) => {},
     onError: () => {
       void message.error(appMessages.createDashboardError);
     },
@@ -64,7 +67,11 @@ export function HomePageCreateDashboardForm() {
 
   return (
     <>
-      <div className={Styles.wrapper}>
+      <motion.div
+        initial={false}
+        animate={hidden ? { bottom: -120 } : { bottom: 24 }}
+        className={Styles.wrapper}
+      >
         <Button
           size={'large'}
           type={'primary'}
@@ -74,7 +81,7 @@ export function HomePageCreateDashboardForm() {
         >
           Добавить дашборд
         </Button>
-      </div>
+      </motion.div>
       <Modal
         title={'Добавить дашборд'}
         open={isCreationOpened}
@@ -97,13 +104,11 @@ export function HomePageCreateDashboardForm() {
               allowClear
               options={properties}
               loading={propertiesPending}
-              placeholder={
-                'Данные дашборда(оставить пустым для всех данных)'
-              }
+              placeholder={'Данные дашборда(оставить пустым для всех данных)'}
             />
           </Form.Item>
         </Form>
       </Modal>
     </>
-  )
+  );
 }
