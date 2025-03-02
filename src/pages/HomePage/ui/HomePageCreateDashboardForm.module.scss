@@ -1,0 +1,12 @@
+.wrapper {
+  position: fixed;
+  bottom: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    box-shadow: var(--primary-shadow);
+  }
+}

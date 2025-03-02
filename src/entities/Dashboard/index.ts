@@ -8,3 +8,4 @@ export type {
 } from './model/dashboardTypes';
 export { DashboardCard } from './ui/DashboardCard';
 export { DashboardChartWidget } from './ui/DashboardChartWidget';
+export { dashboardsApi } from './api/dashboardsApi';

@@ -1,19 +1,10 @@
-import { Button, Form, Input, Modal, Select } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router';
 
-import {
-  DashboardCard,
-  TDashboardCard,
-  TDashboardCreateRequest,
-} from 'entities/Dashboard';
-import { propertiesApi } from 'entities/Property';
-import { appMessages } from 'shared/appMessages';
-import { dashboardsApi } from 'entities/Dashboard/api/dashboardsApi';
-import { useInstance } from 'shared/useInstance';
-import { useAuth } from 'entities/Auth';
+import { DashboardCard, TDashboardCard } from 'entities/Dashboard';
+import { appRoutes } from 'shared/appRoutes';
 
+import { HomePageCreateDashboardForm } from './HomePageCreateDashboardForm';
 import Styles from './HomePage.module.scss';
 
 const dashboards: TDashboardCard[] = [
@@ -82,103 +73,27 @@ const dashboards: TDashboardCard[] = [
 ];
 
 export function HomePage() {
-  const [isCreationOpened, setIsCreationOpened] = useState(false);
-  const [form] = Form.useForm<TDashboardCreateRequest>();
-  const allFields = Form.useWatch([], form);
-  const [isFormReady, setIsFormReady] = useState(false);
-  const { message } = useInstance();
-  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const propertiesIsReady = useMemo(() => {
-    return allFields?.properties?.length > 0;
-  }, [allFields?.properties]);
-
-  const { data: properties, isLoading: propertiesPending } = useQuery({
-    queryKey: ['getAllProperties'],
-    queryFn: propertiesApi.get,
-  });
-
-  const { mutate: createDashboard } = useMutation({
-    mutationKey: ['createDashboard'],
-    mutationFn: dashboardsApi.createDashboard,
-    onSuccess: ({ data }) => {
-      console.log(data);
+  const handleCardClick = useCallback(
+    (id: string) => {
+      navigate(`${appRoutes.dashboards}/${id}`);
     },
-    onError: () => {
-      void message.error(appMessages.createDashboardError);
-    },
-  });
-
-  const handleOpenClick = useCallback(() => {
-    setIsCreationOpened(() => true);
-  }, []);
-
-  const handleCreate = useCallback(() => {
-    if (user?.id) {
-      createDashboard({ ...allFields, owner_id: user.id });
-    }
-  }, [user, allFields]);
-
-  const handleClose = useCallback(() => {
-    setIsCreationOpened(() => false);
-    form.resetFields();
-  }, [form]);
-
-  useEffect(() => {
-    form
-      .validateFields({ validateOnly: true })
-      .then(() => setIsFormReady(() => propertiesIsReady))
-      .catch(() => setIsFormReady(() => false));
-  }, [form, allFields]);
+    [navigate],
+  );
 
   return (
     <div className={Styles.main}>
       <div className={Styles.wrapper}>
         {dashboards.map((dashboard) => (
-          <DashboardCard key={dashboard.id} {...dashboard} />
+          <DashboardCard
+            key={dashboard.id}
+            {...dashboard}
+            onClick={() => handleCardClick(dashboard.id)}
+          />
         ))}
       </div>
-      <div className={Styles.addButtonWrapper}>
-        <Button
-          size={'large'}
-          type={'primary'}
-          icon={<PlusCircleOutlined />}
-          shape={'round'}
-          onClick={handleOpenClick}
-        >
-          Добавить дашборд
-        </Button>
-      </div>
-      <Modal
-        title={'Добавить дашборд'}
-        open={isCreationOpened}
-        onClose={handleClose}
-        onCancel={handleClose}
-        okButtonProps={{ disabled: !isFormReady }}
-        destroyOnClose={true}
-        onOk={handleCreate}
-      >
-        <Form form={form}>
-          <Form.Item
-            name={'title'}
-            rules={[{ required: true, message: appMessages.requiredField }]}
-          >
-            <Input placeholder={'Введите заголовок'} />
-          </Form.Item>
-          <Form.Item
-            name={'properties'}
-            rules={[{ required: true, message: appMessages.requiredField }]}
-          >
-            <Select
-              mode="multiple"
-              allowClear
-              options={properties}
-              loading={propertiesPending}
-              placeholder={'Выберете значения для данных дашборда'}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
+      <HomePageCreateDashboardForm />
     </div>
   );
 }

@@ -54,5 +54,5 @@ export type TDashboardCard = IDashboardBase & {
 
 export type TDashboardFull = IDashboardBase & {
   charts: IChartProps[];
-  filters: TDashboardFilter[];
+  filters: TDashboardFilter;
 };

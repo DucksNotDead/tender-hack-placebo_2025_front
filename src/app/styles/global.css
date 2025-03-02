@@ -8,8 +8,5 @@
   --vio-shadow: 0px 0px 12px 0px rgba(85, 81, 255, 0.8);
   --grey: rgb(185, 185, 198);
   --grey-shadow: 0px 0px 12px 0px rgba(185, 185, 198, 0.8);
-}
-
-.ant-card {
-  box-shadow: var(--blue-light-shadow) !important;
+  --grey-shadow-active: 0px 0px 12px 0px rgba(185, 185, 198, 0.8);
 }

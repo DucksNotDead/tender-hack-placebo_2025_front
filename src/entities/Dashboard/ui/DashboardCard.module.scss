@@ -1,7 +1,16 @@
+.wrapper {
+  position: absolute;
+}
+
 .main {
   position: relative;
-  width: 100%;
-  max-width: 450px;
+  width: 450px;
+  box-shadow: var(--blue-light-shadow) !important;
+  transition: 150ms ease-in;
+
+  &:hover {
+    box-shadow: var(--grey-shadow-active) !important;
+  }
 }
 
 .header {
@@ -21,12 +30,12 @@
   border-radius: 7px;
 
   span {
-    color: white!important;
+    color: white !important;
     font-size: 10px;
     white-space: nowrap;
 
     &:nth-child(1) {
-      color: black!important;
+      color: black !important;
       margin-right: 6px;
       font-weight: 500;
     }
@@ -34,5 +43,20 @@
 }
 
 .footer {
-  margin-top: -10%
+  display: flex;
+  flex-direction: column;
+  margin-top: -10%;
+  gap: 24px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: var(--blue-light-shadow) !important;
+
+  &:hover {
+    box-shadow: var(--grey-shadow-active) !important;
+  }
 }

@@ -14,7 +14,10 @@ export function DashboardCard({
   metrics,
   owner,
   subscribers,
-}: TDashboardCard) {
+  onClick,
+}: TDashboardCard & {
+  onClick?: () => void;
+}) {
   const { user } = useAuth();
 
   const ownerName = useMemo(() => {
@@ -26,20 +29,23 @@ export function DashboardCard({
 
   const subscribersNames = useMemo(() => {
     return subscribers.reduce(
-      (state, current, index) => `${state}${index ? ',' : ''} ${current.full_name}`,
+      (state, current, index) =>
+        `${state}${index ? ',' : ''} ${current.full_name}`,
       '',
     );
   }, [subscribers, user]);
 
   return (
-    <Card className={Styles.main}>
+    <Card className={Styles.main} onClick={onClick}>
       <Space direction={'vertical'} style={{ width: '100%' }}>
         <div className={Styles.header}>
           {metrics
             .filter((_, index) => index < 4)
             .map((metric) => (
               <div key={metric.id} className={Styles.metricItem}>
-                <Typography.Text type={'secondary'}>{metric.name}</Typography.Text>
+                <Typography.Text type={'secondary'}>
+                  {metric.name}
+                </Typography.Text>
 
                 <Typography.Text>{metric.value}</Typography.Text>
               </div>
